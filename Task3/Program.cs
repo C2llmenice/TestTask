@@ -24,7 +24,7 @@ namespace Task3
             GetArrayFromConsole(friendsArray);
             WriteArrayToConsole(friendsArray);
         }
-        public SlobodaFriends(uint numberOfPeople, uint specificPersonId, byte[,] friendsArray)
+      /*  public SlobodaFriends(uint numberOfPeople, uint specificPersonId, byte[,] friendsArray)
         {
             if (numberOfPeople < specificPersonId)
             {
@@ -54,7 +54,7 @@ namespace Task3
             }
             WriteArrayToConsole(this.friendsArray);
         }
-    
+    */
 
             public uint CountFriends ()
         {
@@ -136,7 +136,7 @@ namespace Task3
                 }
             };
             return value;
-            
+             
         }
     }
         
