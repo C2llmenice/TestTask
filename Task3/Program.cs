@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; 
 
 
 namespace Task3
@@ -8,8 +8,10 @@ namespace Task3
         private uint numberOfPeople;
         private uint specificPersonId;
         private byte[,] friendsArray;
-
-        public void InitFromConsole()
+        /*
+         * Initializes the number N of people in company, specific person S and the array of friendship from console
+         */
+        public void Initialize()
         {
             Console.WriteLine("Please enter the number N of people in company: ");
             numberOfPeople = GetUIntFromConsole();
@@ -25,7 +27,13 @@ namespace Task3
             GetArrayFromConsole(friendsArray);
             WriteArrayToConsole(friendsArray);
         }
-        public void Init(uint numberOfPeople, uint specificPersonId, byte[,] friendsArray)
+
+        /*
+         * Function overload
+         * Initializes the number N of people in company, specific person S and the array of friendship with input parameters
+         */
+
+        public void Initialize(uint numberOfPeople, uint specificPersonId, byte[,] friendsArray)
         {
 
 
@@ -33,6 +41,7 @@ namespace Task3
             Console.WriteLine($"Number of people in company is: {this.numberOfPeople}");
             this.specificPersonId = specificPersonId;
             Console.WriteLine($"Number of specific person is: {this.specificPersonId}");
+            this.specificPersonId--;
             this.friendsArray = new byte[numberOfPeople, numberOfPeople];
             if (numberOfPeople < specificPersonId)
             {
@@ -59,19 +68,24 @@ namespace Task3
             WriteArrayToConsole(this.friendsArray);
         }
 
+        /*
+         * Returns a number of friends using the recursive function 'CheckForFriends'
+         * Uses a boolean array with values is the specific person being checked or not to avoid circuits
+         */
 
         public uint CountFriends()
         {
             uint numberOfFriends = 0;
             bool[] checkedPerson = new bool[numberOfPeople];
-            for (uint i = 0; i < numberOfPeople; i++)
-            {
-                checkedPerson[i] = specificPersonId == i;
-            }
-
+            checkedPerson[specificPersonId] = true;
             CheckForFriends(checkedPerson, friendsArray, ref numberOfFriends, specificPersonId);
             return numberOfFriends;
         }
+
+        /* 
+         *Function checkes a row for 1 and that the person isn't checked in the array of checkes, if true increases 
+         *the counter of friends, sets the person checked and the function recursively invokes for that person    
+         */
 
         private void CheckForFriends(bool[] checkedArray, byte[,] workArray, ref uint counter, uint personId)
         {
@@ -86,6 +100,10 @@ namespace Task3
             }
         }
 
+        /* 
+         * Gets an array of 0 and 1 from console using 'GetArrayElementFromConsole()' function 
+         */
+
         private void GetArrayFromConsole(byte[,] array)
         {
 
@@ -98,6 +116,10 @@ namespace Task3
                 }
             }
         }
+
+        /*
+         * Writes an array to console
+         */
 
         private void WriteArrayToConsole(byte[,] array)
         {
@@ -113,6 +135,11 @@ namespace Task3
             }
         }
 
+        /* 
+         * Gets a value from console, if it's convertable to unsigned int and the value is not a 0, 
+         * returns an unsigned int value, otherwise writes a message asking to enter a new value while not correct.
+         */
+
         private uint GetUIntFromConsole()
         {
             uint value = 0;
@@ -127,6 +154,12 @@ namespace Task3
             };
             return value;
         }
+
+        /* 
+         * Gets a value from console, if it's convertable to byte and the value is 0 or 1, returns a byte value 
+         * otherwise writes a message asking to enter a new value while not correct. 
+         * Needed for friendship array filling. 
+         */
 
         private byte GetArrayElementFromConsole()
         {
@@ -150,13 +183,11 @@ namespace Task3
     {
         static void Main(string[] args)
         {
-            SlobodaFriends a = new SlobodaFriends();
-            byte[,] arr = new byte[,] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } };
-            uint N = 3;
-            uint S = 1;
-            a.Init(N, S, arr);
-            // a.InitFromConsole();
-            Console.WriteLine($"number of friends is: {a.CountFriends()}");
+            //function invokation
+            SlobodaFriends test = new SlobodaFriends();
+            //Initialize(3, 1, new byte[,] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } }); //test example
+            test.Initialize();
+            Console.WriteLine($"number of friends is: {test.CountFriends()}");
         }
 
 
