@@ -8,43 +8,47 @@ namespace Task3
         private uint numberOfPeople;
         private uint specificPersonId;
         private byte[,] friendsArray;
-        
-        public SlobodaFriends ()
+
+        public void InitFromConsole()
         {
             Console.WriteLine("Please enter the number N of people in company: ");
-            uint numberOfPeople = GetUIntFromConsole();
+            numberOfPeople = GetUIntFromConsole();
             Console.WriteLine("Please enter the number S of specific person: ");
-            uint specificPersonId = GetUIntFromConsole();
-            if (specificPersonId > numberOfPeople)
+            specificPersonId = GetUIntFromConsole();
+            while (specificPersonId > numberOfPeople)
             {
                 Console.WriteLine("The number of specific person should be smaller or equal than amount of people in company, please try again");
                 specificPersonId = GetUIntFromConsole();
             }
+            specificPersonId--;
             friendsArray = new byte[numberOfPeople, numberOfPeople];
             GetArrayFromConsole(friendsArray);
             WriteArrayToConsole(friendsArray);
         }
-      /*  public SlobodaFriends(uint numberOfPeople, uint specificPersonId, byte[,] friendsArray)
+        public void Init(uint numberOfPeople, uint specificPersonId, byte[,] friendsArray)
         {
+
+
+            this.numberOfPeople = numberOfPeople;
+            Console.WriteLine($"Number of people in company is: {this.numberOfPeople}");
+            this.specificPersonId = specificPersonId;
+            Console.WriteLine($"Number of specific person is: {this.specificPersonId}");
+            this.friendsArray = new byte[numberOfPeople, numberOfPeople];
             if (numberOfPeople < specificPersonId)
             {
-                throw new Exception ("Incorrect, The number of specific person should be smaller or equal than amount of people in company");
+                throw new Exception("Incorrect, The number of specific person should be smaller or equal than amount of people in company");
             }
 
-            for(uint i=0;i<friendsArray.GetLength(0);i++)
+            for (uint i = 0; i < friendsArray.GetLength(0); i++)
             {
-                for(uint j=0; j<friendsArray.GetLength(1);j++)
+                for (uint j = 0; j < friendsArray.GetLength(1); j++)
                 {
-                    if (friendsArray[i, j] != 1 || friendsArray[i, j] != 0)
+                    if (friendsArray[i, j] != 1 && friendsArray[i, j] != 0)
                     {
                         throw new Exception("Incorrect, the array of friends should include only 0 and 1");
                     }
                 }
             };
-
-            this.numberOfPeople = numberOfPeople;
-            this.specificPersonId = specificPersonId;
-            this.friendsArray = new byte[numberOfPeople, numberOfPeople];
             for (uint i = 0; i < friendsArray.GetLength(0); i++)
             {
                 for (uint j = 0; j < friendsArray.GetLength(1); j++)
@@ -54,25 +58,26 @@ namespace Task3
             }
             WriteArrayToConsole(this.friendsArray);
         }
-    */
 
-            public uint CountFriends ()
+
+        public uint CountFriends()
         {
             uint numberOfFriends = 0;
             bool[] checkedPerson = new bool[numberOfPeople];
             for (uint i = 0; i < numberOfPeople; i++)
             {
-                checkedPerson[i] = specificPersonId - 1 == i;
+                checkedPerson[i] = specificPersonId == i;
             }
-            CheckForFriends(checkedPerson, friendsArray, ref numberOfFriends, specificPersonId-1);
+
+            CheckForFriends(checkedPerson, friendsArray, ref numberOfFriends, specificPersonId);
             return numberOfFriends;
         }
 
-        private static void CheckForFriends(bool[] checkedArray, byte[,] workArray, ref uint counter, uint personId)
+        private void CheckForFriends(bool[] checkedArray, byte[,] workArray, ref uint counter, uint personId)
         {
-            for (uint i =0;i<workArray.GetLength(0);i++)
+            for (uint i = 0; i < workArray.GetLength(0); i++)
             {
-                if(workArray[personId, i]==1 && checkedArray[i]==false)
+                if (workArray[personId, i] == 1 && checkedArray[i] == false)
                 {
                     counter++;
                     checkedArray[i] = true;
@@ -81,20 +86,20 @@ namespace Task3
             }
         }
 
-        private static void GetArrayFromConsole(byte[,] array)
+        private void GetArrayFromConsole(byte[,] array)
         {
-            
+
             for (uint i = 0; i < array.GetLength(0); i++)
             {
                 for (uint j = 0; j < array.GetLength(1); j++)
                 {
-                    Console.WriteLine($"Enter {i+1}, {j+1} element");
+                    Console.WriteLine($"Enter {i + 1}, {j + 1} element");
                     array[i, j] = GetArrayElementFromConsole();
                 }
             }
         }
 
-            private static void WriteArrayToConsole (byte[,] array)
+        private void WriteArrayToConsole(byte[,] array)
         {
             Console.WriteLine("Friends array is: ");
 
@@ -108,7 +113,7 @@ namespace Task3
             }
         }
 
-        private static uint GetUIntFromConsole()
+        private uint GetUIntFromConsole()
         {
             uint value = 0;
             bool valueIsCorrect = false;
@@ -123,30 +128,37 @@ namespace Task3
             return value;
         }
 
-        private static byte GetArrayElementFromConsole()
+        private byte GetArrayElementFromConsole()
         {
-            byte value=2;
+            byte value = 2;
             bool valueIsCorrect = false;
             while (!valueIsCorrect)
             {
-                valueIsCorrect = byte.TryParse(Console.ReadLine(), out value) && (value == 0||value ==1);
+                valueIsCorrect = byte.TryParse(Console.ReadLine(), out value) && (value == 0 || value == 1);
                 if (!valueIsCorrect)
                 {
                     Console.WriteLine("That's not a 0 or 1, please try again");
                 }
             };
             return value;
-             
+
         }
     }
-        
-    
+
+
     class Program
     {
         static void Main(string[] args)
         {
             SlobodaFriends a = new SlobodaFriends();
+            byte[,] arr = new byte[,] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } };
+            uint N = 3;
+            uint S = 1;
+            a.Init(N, S, arr);
+            // a.InitFromConsole();
             Console.WriteLine($"number of friends is: {a.CountFriends()}");
         }
+
+
     }
 }
